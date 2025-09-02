@@ -1,0 +1,758 @@
+/* Data Tracker Styles */
+.data-tracker-container {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.tracker-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.tracker-header .back-button {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(30, 50, 120, 0.8);
+  color: var(--cream);
+  border: 2px solid var(--cream-light);
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.tracker-header .back-button:hover {
+  background: rgba(50, 70, 140, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.tracker-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.add-chart-section {
+  background: rgba(10, 20, 50, 0.55);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.chart-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.add-chart-button {
+  background: rgba(0, 150, 0, 0.8);
+  color: white;
+  border: 2px solid #00aa00;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-chart-button:hover {
+  background: rgba(0, 180, 0, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 150, 0, 0.3);
+}
+
+.clear-data-button {
+  background: rgba(200, 50, 50, 0.8);
+  color: white;
+  border: 2px solid #cc3333;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.clear-data-button:hover {
+  background: rgba(220, 70, 70, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(200, 50, 50, 0.3);
+}
+
+.month-selector {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(180, 190, 255, 0.3);
+}
+
+.month-selector h3 {
+  color: var(--cream-dark);
+  margin-bottom: 1rem;
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.month-option {
+  background: rgba(20, 30, 70, 0.6);
+  color: var(--cream);
+  border: 2px solid rgba(180, 190, 255, 0.3);
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.month-option:hover:not(:disabled) {
+  background: rgba(30, 50, 120, 0.8);
+  border-color: var(--cream-light);
+  transform: translateY(-2px);
+}
+
+.month-option:disabled {
+  background: rgba(100, 100, 100, 0.5);
+  border-color: #666;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.charts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.month-chart {
+  background: rgba(10, 20, 50, 0.55);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.month-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.month-box {
+  background: white;
+  color: #2c3e50;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  flex: 1;
+}
+
+.delete-month-button {
+  background: rgba(220, 53, 69, 0.8);
+  color: white;
+  border: 2px solid #dc3545;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-month-button:hover {
+  background: rgba(220, 53, 69, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.month-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  background: #f8f9fa;
+}
+
+.chart-content h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.graph-container {
+  background: rgba(20, 30, 70, 0.6);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin: 2rem 0;
+  text-align: center;
+  border: 1px solid rgba(255, 248, 220, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.line-graph {
+  background: rgba(10, 20, 40, 0.9);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.graph-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  color: var(--cream-light);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Segoe UI', 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.y-label {
+  transform: rotate(-90deg);
+  transform-origin: center;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cream);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.x-label {
+  text-align: center;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cream);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.score-summary {
+  background: rgba(30, 50, 120, 0.6);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.summary-stats {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.summary-stats span {
+  color: var(--cream-light);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.no-data-message {
+  text-align: center;
+  color: var(--cream-light);
+  font-style: italic;
+  padding: 3rem;
+  background: rgba(20, 30, 70, 0.4);
+  border-radius: 12px;
+  border: 2px dashed rgba(180, 190, 255, 0.3);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--cream-light);
+  padding: 4rem 2rem;
+  background: rgba(10, 20, 50, 0.55);
+  border-radius: 16px;
+}
+
+.empty-state h3 {
+  color: var(--cream-dark);
+  margin-bottom: 1rem;
+}
+
+/* Calendar View Styles */
+.calendar-view {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.calendar-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.calendar-header h1 {
+  color: var(--cream-dark);
+  font-weight: 800;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.calendar-day {
+  background: rgba(20, 30, 70, 0.6);
+  border: 2px solid rgba(180, 190, 255, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.calendar-day:hover {
+  background: rgba(30, 50, 120, 0.8);
+  border-color: var(--cream-light);
+  transform: translateY(-2px);
+}
+
+.calendar-day.selected {
+  background: rgba(255, 170, 0, 0.3);
+  border-color: #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
+}
+
+.calendar-day.has-score {
+  background: rgba(0, 150, 0, 0.3);
+  border-color: #00aa00;
+}
+
+.calendar-day.has-score.selected {
+  background: rgba(255, 170, 0, 0.4);
+  border-color: #ffaa00;
+}
+
+.day-number {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+}
+
+.day-score {
+  background: rgba(255, 255, 255, 0.9);
+  color: #2c3e50;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.score-input-section {
+  background: rgba(10, 20, 50, 0.55);
+  border-radius: 16px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 400px;
+  text-align: center;
+}
+
+.score-input-section h3 {
+  color: var(--cream-dark);
+  margin-bottom: 1.5rem;
+}
+
+.score-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.score-input {
+  padding: 1rem;
+  border: 2px solid rgba(180, 190, 255, 0.5);
+  border-radius: 8px;
+  font-size: 1.1rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2c3e50;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.save-score-button, .cancel-button {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid;
+}
+
+.save-score-button {
+  background: rgba(0, 150, 0, 0.8);
+  color: white;
+  border-color: #00aa00;
+}
+
+.save-score-button:hover {
+  background: rgba(0, 180, 0, 0.9);
+  transform: translateY(-2px);
+}
+
+.cancel-button {
+  background: rgba(100, 100, 100, 0.8);
+  color: var(--cream);
+  border-color: #666;
+}
+
+.cancel-button:hover {
+  background: rgba(120, 120, 120, 0.9);
+  transform: translateY(-2px);
+}
+
+.calendar-footer {
+  text-align: center;
+}
+
+.done-button {
+  background: rgba(30, 50, 120, 0.8);
+  color: var(--cream);
+  border: 2px solid var(--cream-light);
+  padding: 1rem 3rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.done-button:hover {
+  background: rgba(50, 70, 140, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(30, 50, 120, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .data-tracker-container, .calendar-view {
+    padding: 1rem;
+  }
+  
+  .tracker-header .back-button {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .month-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .calendar-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .calendar-day {
+    min-height: 60px;
+    padding: 0.5rem;
+  }
+  
+  .summary-stats {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .graph-container {
+    padding: 1rem;
+  }
+  
+  .line-graph {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Confirmation Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirmation-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 1rem;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+.confirmation-modal h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.confirmation-modal p {
+  color: #555;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.confirm-button {
+  background: rgba(40, 167, 69, 0.9);
+  color: white;
+  border: 2px solid #28a745;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.confirm-button:hover {
+  background: #28a745;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.cancel-button {
+  background: rgba(220, 53, 69, 0.9);
+  color: white;
+  border: 2px solid #dc3545;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+}
+
+.cancel-button:hover {
+  background: #dc3545;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-buttons {
+    flex-direction: column;
+  }
+  
+  .confirmation-modal {
+    margin: 0.5rem;
+    padding: 1.5rem;
+  }
+}
+
+/* Day Runs View Styles */
+.day-runs-view {
+  min-height: 100vh;
+  padding: 2rem;
+  background: var(--primary-bg);
+}
+
+.day-runs-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.day-runs-header h1 {
+  color: var(--cream);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.average-display {
+  background: rgba(255, 248, 220, 0.95);
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  margin: 1rem auto;
+  display: inline-block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.average-label {
+  color: #1e3a8a;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.average-score {
+  color: #3b82f6;
+  font-weight: 900;
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
+}
+
+.runs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+}
+
+.run-input-item {
+  background: rgba(255, 248, 220, 0.95);
+  border-radius: 12px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.run-input-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.run-label {
+  color: #1e3a8a;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.run-score-input {
+  width: 70px;
+  padding: 0.4rem;
+  border: 2px solid #3b82f6;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  background: white;
+  text-align: center;
+}
+
+.run-score-input:focus {
+  outline: none;
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.day-runs-footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.clear-runs-button {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.clear-runs-button:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive Design for Day Runs */
+@media (max-width: 768px) {
+  .runs-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.8rem;
+  }
+  
+  .day-runs-header h1 {
+    font-size: 2rem;
+  }
+  
+  .day-runs-footer {
+    flex-direction: column;
+  }
+}
