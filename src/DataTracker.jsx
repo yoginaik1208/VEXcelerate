@@ -252,7 +252,7 @@ function DataTracker({ onBackToAnalyzer }) {
     <div className="data-tracker-container">
       <div className="tracker-header">
         <button onClick={onBackToAnalyzer} className="back-button">
-          ← Back to Team Analyzer
+          ← Back to Home
         </button>
         <h1>Team Data Tracker</h1>
         <p style={{marginTop: '-8px', color: '#3b4ba0', fontWeight: 600}}>

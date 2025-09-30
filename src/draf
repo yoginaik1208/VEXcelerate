@@ -1,0 +1,613 @@
+cat > /workspaces/VEXcelerate/src/Timer.jsx << 'EOF'
+import { useState, useEffect, useRef, useCallback } from 'react';
+import './Timer.css';
+
+function Timer({ onBackToAnalyzer }) {
+  const audioRef = useRef(null);
+  const audioRef2 = useRef(null);
+  const [timeLeft, setTimeLeft] = useState(60);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [phase, setPhase] = useState('ready');
+  const [countdownValue, setCountdownValue] = useState(0);
+  const intervalRef = useRef(null);
+  const audioContextRef = useRef(null);
+  
+  // Drag functionality
+  const [isDragging, setIsDragging] = useState(false);
+  const [isTimeScrubbing, setIsTimeScrubbing] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 100, y: 100 });
+  const [dragStartY, setDragStartY] = useState(0);
+  const [dragStartTime, setDragStartTime] = useState(0);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+    return () => {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  const playBeep = (frequency = 800, duration = 200, volume = 0.3) => {
+    if (!audioContextRef.current) return;
+    const oscillator = audioContextRef.current.createOscillator();
+    const gainNode = audioContextRef.current.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContextRef.current.destination);
+    oscillator.frequency.value = frequency;
+    oscillator.type = 'square';
+    gainNode.gain.setValueAtTime(volume, audioContextRef.current.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + duration / 1000);
+    oscillator.start(audioContextRef.current.currentTime);
+    oscillator.stop(audioContextRef.current.currentTime + duration / 1000);
+  };
+
+  const playDriverSwitch = () => {
+    playBeep(600, 300, 0.4);
+    setTimeout(() => playBeep(600, 300, 0.4), 100);
+  };
+
+  const playEndBuzzer = () => playBeep(400, 1000, 0.6);
+
+  const speakRemotesDown = () => {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance('Remotes down');
+      const voices = speechSynthesis.getVoices();
+      const englishVoice = voices.find(voice => 
+        voice.lang.startsWith('en') && 
+        (voice.name.includes('Male') || voice.name.includes('David') || voice.name.includes('Daniel'))
+      ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+      
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+      utterance.volume = 1.0;
+      utterance.rate = 0.8;
+      utterance.pitch = 0.7;
+      speechSynthesis.speak(utterance);
+    }
+  };
+
+  const startTimer = async () => {
+    if (audioContextRef.current?.state === 'suspended') {
+      await audioContextRef.current.resume();
+    }
+    setPhase('countdown');
+    setCountdownValue(0);
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.onended = null;
+      audioRef.current.onended = () => {
+        setPhase('running');
+        setIsRunning(true);
+        setIsPaused(false);
+      };
+      try {
+        await audioRef.current.play();
+      } catch (error) {
+        console.log('Audio play failed:', error);
+        setPhase('running');
+        setIsRunning(true);
+        setIsPaused(false);
+      }
+    } else {
+      setPhase('running');
+      setIsRunning(true);
+      setIsPaused(false);
+    }
+  };
+
+  const pauseTimer = () => {
+    setIsPaused(!isPaused);
+    if (audioRef2.current && !isPaused) {
+      audioRef2.current.pause();
+    }
+  };
+
+  const stopTimer = () => {
+    setIsRunning(false);
+    setIsPaused(false);
+    setPhase('ready');
+    setTimeLeft(60);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    if (audioRef2.current) {
+      audioRef2.current.pause();
+      audioRef2.current.currentTime = 0;
+    }
+  };
+
+  const resetTimer = () => {
+    stopTimer();
+  };
+
+  // Enhanced drag handlers
+  const handleMouseDown = (e) => {
+    // Don't start drag on buttons
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const rect = timerRef.current.getBoundingClientRect();
+    
+    // Check if clicking on time display for scrubbing
+    if (e.target.closest('.time-display')) {
+      console.log('Starting time scrub');
+      setIsTimeScrubbing(true);
+      setDragStartY(e.clientY);
+      setDragStartTime(timeLeft);
+      // Pause timer during scrubbing if running
+      if (isRunning && !isPaused) {
+        setIsPaused(true);
+      }
+    } else {
+      // Position dragging
+      console.log('Starting position drag');
+      setIsDragging(true);
+      setDragOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+    }
+
+    // Bring to front with higher z-index
+    if (timerRef.current) {
+      timerRef.current.style.zIndex = '99999';
+      console.log('Set z-index to 99999');
+    }
+  };
+
+  const handleMouseMove = useCallback((e) => {
+    if (isTimeScrubbing) {
+      // Time scrubbing: vertical movement changes time
+      const deltaY = dragStartY - e.clientY; // Up = positive = backward in time
+      const sensitivity = 3; // pixels per second
+      const timeChange = Math.round(deltaY / sensitivity);
+      const newTime = Math.max(0, Math.min(60, dragStartTime + timeChange));
+      
+      console.log(`Time scrubbing: deltaY=${deltaY}, timeChange=${timeChange}, newTime=${newTime}`);
+      setTimeLeft(newTime);
+      
+    } else if (isDragging) {
+      // Position dragging
+      const newX = Math.max(0, Math.min(window.innerWidth - 500, e.clientX - dragOffset.x));
+      const newY = Math.max(0, Math.min(window.innerHeight - 400, e.clientY - dragOffset.y));
+      setPosition({ x: newX, y: newY });
+    }
+  }, [isTimeScrubbing, isDragging, dragStartY, dragStartTime, dragOffset]);
+
+  const handleMouseUp = useCallback(() => {
+    console.log('Mouse up - ending drag/scrub');
+    
+    if (isTimeScrubbing || isDragging) {
+      setIsTimeScrubbing(false);
+      setIsDragging(false);
+      
+      // Return to normal z-index
+      if (timerRef.current) {
+        setTimeout(() => {
+          timerRef.current.style.zIndex = '1000';
+          console.log('Reset z-index to 1000');
+        }, 100);
+      }
+    }
+  }, [isTimeScrubbing, isDragging]);
+
+  // Global event listeners
+  useEffect(() => {
+    if (isTimeScrubbing || isDragging) {
+      console.log('Adding global listeners');
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = isTimeScrubbing ? 'ns-resize' : 'grabbing';
+    }
+
+    return () => {
+      console.log('Removing global listeners');
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    };
+  }, [isTimeScrubbing, isDragging, handleMouseMove, handleMouseUp]);
+
+  useEffect(() => {
+    if (isRunning && !isPaused && timeLeft > 0 && !isTimeScrubbing) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft(prev => {
+          const newTime = prev - 1;
+          if (newTime === 35) playDriverSwitch();
+          else if (newTime === 25) playDriverSwitch();
+          
+          // Start countdown audio at 11 seconds (1 second earlier)
+          if (newTime === 11 && audioRef2.current) {
+            audioRef2.current.currentTime = 0;
+            try {
+              audioRef2.current.play();
+              setTimeout(() => {
+                if (audioRef2.current) {
+                  audioRef2.current.pause();
+                  audioRef2.current.currentTime = 0;
+                }
+              }, 11000);
+            } catch (error) {
+              console.log('Countdown audio play failed:', error);
+            }
+          }
+          
+          if (newTime === 0) {
+            playEndBuzzer();
+            speakRemotesDown();
+            setIsRunning(false);
+            setPhase('finished');
+            if (audioRef2.current) {
+              audioRef2.current.pause();
+              audioRef2.current.currentTime = 0;
+            }
+          }
+          return newTime;
+        });
+      }, 1000);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isRunning, isPaused, timeLeft, isTimeScrubbing]);
+
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const getPhaseText = () => {
+    if (isTimeScrubbing) return 'SCRUBBING TIME ⏱️';
+    if (isPaused) return 'PAUSED';
+    switch (phase) {
+      case 'countdown':
+        return countdownValue > 0 ? countdownValue.toString() : 'GO!';
+      case 'running':
+        return 'MATCH IN PROGRESS';
+      case 'finished':
+        return 'MATCH COMPLETE';
+      default:
+        return 'READY TO START';
+    }
+  };
+
+  const getTimeColor = () => {
+    if (isTimeScrubbing) return '#00ff00';
+    if (phase === 'finished') return '#ff4444';
+    if (timeLeft <= 10 && phase === 'running') return '#ffaa00';
+    return 'white';
+  };
+
+  return (
+    <div 
+      ref={timerRef}
+      className={`timer-container ${isDragging ? 'position-dragging' : ''} ${isTimeScrubbing ? 'time-scrubbing' : ''}`}
+      style={{
+        position: 'fixed',
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        zIndex: (isDragging || isTimeScrubbing) ? 99999 : 1000,
+        transform: isDragging ? 'scale(1.05) rotate(2deg)' : 
+                  isTimeScrubbing ? 'scale(1.08) rotateX(5deg)' : 'scale(1)',
+        boxShadow: isDragging ? 
+          '0 30px 60px rgba(0,0,0,0.6), 0 20px 40px rgba(0,0,0,0.4)' :
+          isTimeScrubbing ?
+          '0 30px 60px rgba(0,255,0,0.4), 0 20px 40px rgba(0,255,0,0.2)' :
+          '0 10px 25px rgba(0,0,0,0.2)',
+        transition: (isDragging || isTimeScrubbing) ? 'none' : 'all 0.3s ease',
+        cursor: isTimeScrubbing ? 'ns-resize' : isDragging ? 'grabbing' : 'grab',
+        userSelect: 'none',
+        border: isTimeScrubbing ? '3px solid #00ff00' : isDragging ? '3px solid #4CAF50' : 'none'
+      }}
+      onMouseDown={handleMouseDown}
+    >
+      {/* Header */}
+      <div 
+        className="timer-header" 
+        style={{
+          padding: '20px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderRadius: '15px 15px 0 0',
+          position: 'relative',
+          cursor: isDragging ? 'grabbing' : 'grab'
+        }}
+      >
+        <button 
+          onClick={onBackToAnalyzer} 
+          className="back-button"
+          style={{
+            position: 'absolute',
+            top: '15px',
+            left: '15px',
+            background: 'rgba(255,255,255,0.2)',
+            color: 'white',
+            border: 'none',
+            padding: '8px 12px',
+            borderRadius: '6px',
+            fontSize: '14px',
+            cursor: 'pointer',
+            backdropFilter: 'blur(10px)',
+            zIndex: 10
+          }}
+        >
+          ← Back to Score Analyzer
+        </button>
+        
+        <div style={{ marginTop: '40px', textAlign: 'center' }}>
+          <h1 style={{ 
+            color: 'white', 
+            margin: '0 0 8px 0', 
+            fontSize: '2rem',
+            fontWeight: '700',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}>
+            VEX IQ Match Timer
+          </h1>
+          <p style={{
+            color: 'rgba(255,255,255,0.9)', 
+            margin: '0',
+            fontSize: '1rem',
+            fontWeight: '500'
+          }}>
+            Official 1-minute match timer with driver switch alerts
+          </p>
+          <p style={{
+            color: 'rgba(255,255,255,0.7)', 
+            margin: '5px 0 0 0',
+            fontSize: '0.9rem',
+            fontStyle: 'italic'
+          }}>
+            Drag header to move • Click TIME numbers to scrub forward/back
+          </p>
+        </div>
+        
+        <audio ref={audioRef} preload="auto">
+          <source src="/vex music.mp4" type="audio/mp4" />
+          <source src="/vex music.mp3" type="audio/mpeg" />
+        </audio>
+        <audio ref={audioRef2} preload="auto">
+          <source src="/vex music 2.mp4" type="audio/mp4" />
+          <source src="/vex music 2.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+      
+      {/* Timer Display */}
+      <div className="timer-display" style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        padding: '30px',
+        borderRadius: '0 0 15px 15px',
+        minWidth: '450px'
+      }}>
+        <div className="phase-indicator" style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <div className="phase-text" style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            color: isTimeScrubbing ? '#00ff00' : 'white',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}>
+            {getPhaseText()}
+          </div>
+        </div>
+        
+        {/* CLICKABLE TIME DISPLAY */}
+        <div 
+          className="time-display" 
+          style={{ 
+            fontSize: '4rem', 
+            fontWeight: '900',
+            textAlign: 'center',
+            margin: '20px 0',
+            color: getTimeColor(),
+            textShadow: '0 4px 8px rgba(0,0,0,0.3)',
+            fontFamily: 'monospace',
+            cursor: 'ns-resize',
+            padding: '15px',
+            borderRadius: '12px',
+            background: isTimeScrubbing ? 
+              'rgba(0,255,0,0.2)' : 
+              'rgba(255,255,255,0.1)',
+            border: isTimeScrubbing ? 
+              '3px dashed #00ff00' : 
+              '2px solid rgba(255,255,255,0.2)',
+            transition: 'all 0.2s ease',
+            userSelect: 'none'
+          }}
+          title="Click and drag up/down to scrub time"
+        >
+          {formatTime(timeLeft)}
+          {isTimeScrubbing && (
+            <div style={{
+              fontSize: '1rem',
+              color: '#00ff00',
+              marginTop: '5px',
+              fontWeight: '600'
+            }}>
+              ↕ DRAG TO SCRUB TIME ↕
+            </div>
+          )}
+        </div>
+        
+        {/* Driver switches */}
+        <div className="driver-switches" style={{
+          display: 'flex',
+          gap: '15px',
+          marginBottom: '25px',
+          justifyContent: 'center'
+        }}>
+          <div className={`switch-indicator ${timeLeft <= 35 && timeLeft > 25 ? 'active' : ''}`} style={{
+            background: timeLeft <= 35 && timeLeft > 25 ? 
+              'linear-gradient(135deg, #ff6b6b, #ee5a24)' : 
+              'rgba(255,255,255,0.1)',
+            padding: '12px 20px',
+            borderRadius: '8px',
+            color: 'white',
+            fontWeight: '600',
+            fontSize: '0.9rem',
+            border: '2px solid rgba(255,255,255,0.2)',
+            backdropFilter: 'blur(10px)'
+          }}>
+            Driver Switch 1: {timeLeft > 35 ? '25s' : timeLeft > 25 ? 'ACTIVE' : 'COMPLETE'}
+          </div>
+          <div className={`switch-indicator ${timeLeft <= 25 && timeLeft > 0 ? 'active' : ''}`} style={{
+            background: timeLeft <= 25 && timeLeft > 0 ? 
+              'linear-gradient(135deg, #ff6b6b, #ee5a24)' : 
+              'rgba(255,255,255,0.1)',
+            padding: '12px 20px',
+            borderRadius: '8px',
+            color: 'white',
+            fontWeight: '600',
+            fontSize: '0.9rem',
+            border: '2px solid rgba(255,255,255,0.2)',
+            backdropFilter: 'blur(10px)'
+          }}>
+            Driver Switch 2: {timeLeft > 25 ? '35s' : 'ACTIVE'}
+          </div>
+        </div>
+        
+        {/* Controls */}
+        <div className="timer-controls" style={{
+          display: 'flex',
+          gap: '12px',
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          {!isRunning && phase !== 'countdown' && (
+            <button 
+              onClick={startTimer} 
+              disabled={phase === 'finished'}
+              style={{
+                background: phase === 'finished' ? 
+                  'linear-gradient(135deg, #95a5a6, #7f8c8d)' :
+                  'linear-gradient(135deg, #4CAF50, #45a049)',
+                color: 'white',
+                border: 'none',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                fontSize: '1rem',
+                cursor: phase === 'finished' ? 'not-allowed' : 'pointer',
+                minWidth: '140px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+              }}
+            >
+              {phase === 'finished' ? 'Match Complete' : 'Start Match'}
+            </button>
+          )}
+          {isRunning && (
+            <button 
+              onClick={pauseTimer} 
+              style={{
+                background: 'linear-gradient(135deg, #FF9800, #F57F17)',
+                color: 'white',
+                border: 'none',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                minWidth: '140px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+              }}
+            >
+              {isPaused ? '▶ Resume' : '⏸ Pause'}
+            </button>
+          )}
+          {(isRunning || phase === 'countdown') && (
+            <button 
+              onClick={stopTimer} 
+              style={{
+                background: 'linear-gradient(135deg, #f44336, #d32f2f)',
+                color: 'white',
+                border: 'none',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                minWidth: '140px',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+              }}
+            >
+              ⏹ Stop
+            </button>
+          )}
+          <button 
+            onClick={resetTimer} 
+            style={{
+              background: 'rgba(255,255,255,0.1)',
+              color: 'white',
+              border: '2px solid rgba(255,255,255,0.3)',
+              padding: '12px 24px',
+              borderRadius: '8px',
+              fontWeight: '600',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              minWidth: '140px',
+              backdropFilter: 'blur(10px)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+            }}
+          >
+            🔄 Reset
+          </button>
+        </div>
+        
+        {/* Progress bar */}
+        {phase === 'running' && (
+          <div className="match-progress" style={{ marginTop: '25px' }}>
+            <div className="progress-bar" style={{
+              width: '100%',
+              height: '8px',
+              background: 'rgba(255,255,255,0.2)',
+              borderRadius: '4px',
+              overflow: 'hidden',
+              marginBottom: '15px'
+            }}>
+              <div 
+                className="progress-fill" 
+                style={{ 
+                  width: `${((60 - timeLeft) / 60) * 100}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #4CAF50, #8BC34A)',
+                  transition: isTimeScrubbing ? 'none' : 'width 1s ease'
+                }}
+              ></div>
+            </div>
+            <div className="progress-milestones" style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              fontSize: '0.8rem',
+              color: 'rgba(255,255,255,0.8)'
+            }}>
+              <div className={`milestone ${timeLeft <= 25 ? 'passed' : ''}`}>35s</div>
+              <div className={`milestone ${timeLeft <= 35 ? 'passed' : ''}`}>25s</div>
+              <div className={`milestone ${timeLeft <= 50 ? 'passed' : ''}`}>10s</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Timer;
+EOF

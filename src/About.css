@@ -1,0 +1,9 @@
+.about-container { max-width: 600px; margin: 3rem auto; background: linear-gradient(135deg, #1e3278 0%, #2a4490 100%); color: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(30,50,120,0.15); padding: 2.5rem 2rem; text-align: center; animation: fadeInUp 1s; }
+.about-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: 1px; }
+.about-animated { margin-bottom: 1.5rem; font-size: 2.2rem; animation: bounceIn 1.2s; }
+.about-emoji { margin: 0 0.3rem; animation: wiggle 1.5s infinite; }
+.about-list { list-style: none; padding: 0; font-size: 1.2rem; line-height: 1.7; }
+.about-list li { margin-bottom: 1.1rem; background: rgba(255,255,255,0.08); border-radius: 8px; padding: 0.7rem; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+@keyframes bounceIn { 0% { transform: scale(0.8); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+@keyframes wiggle { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }

@@ -79,3 +79,24 @@ VEX IQ is a robotics competition platform designed for elementary and middle sch
 ---
 
 *Built with ❤️ for the VEX IQ community*
+
+## 📦 Deploying to your custom domain (Porkbun)
+
+I added a GitHub Actions workflow to build and publish the `dist/` to the `gh-pages` branch and a `CNAME` file with your domain `vexcelerate.app`.
+
+Steps you need to finish on Porkbun:
+
+1. Add an A record for `@` pointing to GitHub Pages IPs:
+
+	- 185.199.108.153
+	- 185.199.109.153
+	- 185.199.110.153
+	- 185.199.111.153
+
+2. Add a CNAME record for `www` pointing to `<your-github-username>.github.io` (for example: `yoginaik1208.github.io`).
+
+3. Push to `main` branch on GitHub. The action will build and publish to `gh-pages`. GitHub Pages will serve the site and the `CNAME` will make it available at `https://vexcelerate.app` once DNS propagates.
+
+Notes:
+- DNS propagation can take up to 24-48 hours but usually completes within an hour.
+- After DNS is set, open your repo settings → Pages and confirm the custom domain is set to `vexcelerate.app` and HTTPS is enabled.

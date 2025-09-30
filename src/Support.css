@@ -1,0 +1,10 @@
+.support-container { max-width: 500px; margin: 3rem auto; background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(76,75,162,0.15); padding: 2.5rem 2rem; text-align: center; animation: fadeInUp 1s; }
+.support-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 1.2rem; letter-spacing: 1px; }
+.support-animation { margin-bottom: 1.5rem; font-size: 2rem; animation: bounceIn 1.2s; }
+.support-emoji { margin: 0 0.3rem; animation: wiggle 1.5s infinite; }
+.support-text { font-size: 1.1rem; margin-bottom: 1.5rem; }
+.paypal-button { display: inline-block; background: #ffc439; color: #222; font-weight: 700; font-size: 1.1rem; padding: 0.8rem 2rem; border-radius: 10px; text-decoration: none; box-shadow: 0 4px 16px rgba(76,75,162,0.12); transition: background 0.2s; margin-top: 1rem; }
+.paypal-button:hover { background: #ffe082; color: #111; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
+@keyframes bounceIn { 0% { transform: scale(0.8); } 60% { transform: scale(1.1); } 100% { transform: scale(1); } }
+@keyframes wiggle { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
