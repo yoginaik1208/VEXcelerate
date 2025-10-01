@@ -94,21 +94,76 @@
 /* Responsive Design */
 @media (max-width: 600px) {
   .timer-container {
-    max-width: 95vw;
+    max-width: 95vw !important;
+    width: 95vw !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 1rem auto !important;
+    padding: 1rem !important;
+  }
+  
+  .timer-centered-wrapper {
+    min-height: auto !important;
+    height: auto !important;
+    position: relative !important;
+    padding: 0.5rem !important;
+  }
+  
+  .timer-header {
+    margin-top: 0.5rem !important;
+    padding: 0.5rem !important;
   }
   
   .timer-controls {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+    margin: 1rem 0 !important;
   }
   
   .timer-controls button {
-    width: 100%;
-    max-width: 200px;
+    width: auto !important;
+    min-width: 120px !important;
+    max-width: none !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.95rem !important;
   }
   
   .driver-switches {
-    flex-direction: column;
-    align-items: center;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    margin: 1rem 0 !important;
+  }
+  
+  .driver-switches button {
+    width: 90% !important;
+    max-width: 300px !important;
+    font-size: 0.95rem !important;
+    padding: 0.75rem !important;
+  }
+  
+  /* Make time display responsive */
+  .time-display {
+    font-size: clamp(3rem, 15vw, 4rem) !important;
+    padding: 1rem 0.5rem !important;
+  }
+  
+  /* Adjust title sizes */
+  h1 {
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+  }
+  
+  p {
+    font-size: clamp(0.85rem, 3vw, 1rem) !important;
+  }
+  
+  /* Progress bar */
+  .progress-container {
+    margin: 1rem 0 !important;
   }
 }
+
