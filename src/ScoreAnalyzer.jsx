@@ -198,13 +198,6 @@ const ScoreAnalyzer = ({ onBackToHome }) => {
   return (
     <div className="container">
       <div className="page-header">
-        <button 
-          onClick={onBackToHome}
-          className="back-button-global"
-          style={{ background: 'rgba(255,255,255,0.12)', color: 'var(--cream)', border: 'none' }}
-        >
-          ← Back to Home
-        </button>
         
         <h1>VEX IQ Team Score Analyzer</h1>
         <p style={{marginTop: '-8px', color: '#3b4ba0', fontWeight: 600}}>Designed for Mix & Match reviews - Works for both Elementary and Middle School teams</p>

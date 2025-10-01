@@ -103,9 +103,6 @@ function MixMatchCalculator({ onBackToAnalyzer }) {
   return (
     <div className="mixmatch-container">
       <div className="mixmatch-header">
-        <button onClick={onBackToAnalyzer} className="back-button">
-          ← Back to Home
-        </button>
         <h1>Mix & Match Calculator</h1>
         <p style={{marginTop: '-8px', color: 'var(--cream)', fontWeight: 600, fontSize: '1.1rem', textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)', background: 'rgba(0, 0, 0, 0.2)', padding: '0.5rem 1rem', borderRadius: '8px', display: 'inline-block'}}>
           Calculate your VEX IQ 2025-26 Mix & Match match scores

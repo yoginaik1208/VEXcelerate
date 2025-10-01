@@ -351,7 +351,6 @@ function Timer({ onBackToAnalyzer }) {
           position: 'relative'
         }}
       >
-  <button onClick={onBackToAnalyzer} className="back-button">← Back to Home</button>
         
         <div style={{ marginTop: '40px', textAlign: 'center' }}>
           <h1 style={{ 
