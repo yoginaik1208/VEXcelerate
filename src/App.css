@@ -7,15 +7,25 @@
 }
 /* App content padding to prevent overlap with banner */
 .app-content {
-  padding-top: 2.5rem;
+  padding-top: 5rem;
 }
 
 .app-content-padded {
-  padding-top: 2.5rem;
+  padding-top: 5rem;
 }
 
 .timer-content-wrapper {
   margin-top: 2.5rem;
+}
+
+/* Mobile content adjustments */
+@media (max-width: 600px) {
+  .app-content,
+  .app-content-padded,
+  .timer-content-wrapper {
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
 }
 
 /* Global back button (shared look used by Data Tracker) */
@@ -74,13 +84,16 @@
   justify-content: center;
   align-items: center;
   gap: 2.5rem;
-  margin-bottom: 2.5rem;
   background: linear-gradient(90deg, #3a4fff 0%, #5e7cff 100%);
   border-radius: 18px;
   box-shadow: 0 6px 24px rgba(30,40,90,0.10);
   padding: 0.7rem 2rem;
-  position: relative;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
   animation: navbarFadeIn 0.8s cubic-bezier(.68,-0.55,.27,1.55);
+  z-index: 1000;
 }
 
 @keyframes navbarFadeIn {
@@ -172,18 +185,27 @@
 @media (max-width: 600px) {
   .animated-navbar {
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 0.75rem;
     padding: 1rem 0.5rem;
+    top: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
   }
   .nav-tabs {
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 0.5rem;
   }
   .nav-tab {
     width: 100%;
-    max-width: 220px;
-    font-size: 1rem;
-    padding: 0.7rem 1.2rem;
+    max-width: 200px;
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+  .app-content-padded {
+    padding-top: 12rem;
+  }
+  .timer-content-wrapper {
+    margin-top: 0;
   }
 }
 
