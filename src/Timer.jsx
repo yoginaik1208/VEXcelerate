@@ -371,14 +371,6 @@ function Timer({ onBackToAnalyzer }) {
           }}>
             Official 1-minute match timer with driver switch alerts
           </p>
-          <p style={{
-            color: 'rgba(255,255,255,0.7)', 
-            margin: '5px 0 0 0',
-            fontSize: '0.9rem',
-            fontStyle: 'italic'
-          }}>
-            Official 1-minute match timer with driver switch alerts
-          </p>
         </div>
         
         <audio ref={audioRef} preload="auto">
