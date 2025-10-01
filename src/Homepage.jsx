@@ -2,7 +2,6 @@
 import React from 'react';
 import './Homepage.css';
 import AdSenseAd from './components/AdSenseAd.jsx';
-import { DONATE_LINKS } from './config';
 
 const Homepage = ({ onNavigate }) => {
   const features = [
@@ -82,11 +81,6 @@ const Homepage = ({ onNavigate }) => {
 
       <div className="homepage-footer">
         <div style={{display:'flex', justifyContent:'center', gap:12, alignItems:'center', flexWrap:'wrap'}}>
-          <div style={{display:'flex', gap:8}}>
-            <a className="donate-link" href={DONATE_LINKS.koFi} target="_blank" rel="noreferrer" style={{color:'inherit', textDecoration:'none', fontWeight:700}}>☕ Ko-fi</a>
-            <a className="donate-link" href={DONATE_LINKS.buyMeACoffee} target="_blank" rel="noreferrer" style={{color:'inherit', textDecoration:'none', fontWeight:700}}> • BuyMeACoffee</a>
-            <a className="donate-link" href={DONATE_LINKS.gumroad} target="_blank" rel="noreferrer" style={{color:'inherit', textDecoration:'none', fontWeight:700}}> • Gumroad</a>
-          </div>
           <div>
             <button className="donate-link" onClick={(e)=>{ e.preventDefault(); if(typeof onNavigate === 'function') onNavigate('privacy'); }} style={{background:'transparent', border:'none', color:'inherit', fontWeight:700, cursor:'pointer'}}>Privacy</button>
           </div>
