@@ -1,27 +1,29 @@
 /* VEXcelerate Homepage - Premium UI/UX Design */
 
 .homepage-container {
-  min-height: 100vh;
+  min-height: auto;
   background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e40af 100%);
   color: #ffffff;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Hero Section */
 .hero-section {
-  padding: 3rem 1.5rem 2.5rem;
+  padding: 2rem 1.5rem 1.5rem;
   text-align: center;
   position: relative;
 }
 
 .hero-content {
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
   animation: fadeInUp 0.8s ease-out;
 }
 
 .hero-title {
-  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-size: clamp(2.25rem, 7vw, 3.5rem);
   font-weight: 800;
   margin: 0 0 0.5rem;
   letter-spacing: -0.02em;
@@ -49,19 +51,19 @@
 }
 
 .hero-tagline {
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
   font-weight: 600;
   color: #fbbf24;
-  margin: 0 0 1rem;
+  margin: 0 0 0.75rem;
   letter-spacing: 0.02em;
 }
 
 .hero-description {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  line-height: 1.6;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  line-height: 1.5;
   color: #e0e7ff;
   margin: 0;
-  max-width: 600px;
+  max-width: 550px;
   margin-left: auto;
   margin-right: auto;
   font-weight: 400;
@@ -69,28 +71,30 @@
 
 /* Features Section */
 .features-section {
-  padding: 1.5rem 1.5rem 3rem;
+  padding: 1.25rem 1.5rem 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
+  flex-grow: 1;
 }
 
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: 1.25rem;
   margin: 0 auto;
 }
 
 @media (min-width: 768px) {
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
   }
 }
 
 @media (min-width: 1024px) {
   .features-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
+    gap: 1rem;
   }
 }
 
@@ -98,13 +102,15 @@
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  padding: 1.75rem 1.5rem;
+  border-radius: 12px;
+  padding: 1.5rem 1.25rem;
   cursor: pointer;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   animation: fadeInUp 0.6s ease-out backwards;
+  display: flex;
+  flex-direction: column;
 }
 
 .feature-card:nth-child(1) { animation-delay: 0.1s; }
@@ -143,8 +149,8 @@
 }
 
 .feature-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
   display: block;
   filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.3));
   transition: transform 0.35s ease;
@@ -155,34 +161,35 @@
 }
 
 .feature-title {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.6rem;
   color: #ffffff;
   letter-spacing: -0.01em;
 }
 
 .feature-description {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: #cbd5e1;
-  margin: 0 0 1rem;
+  margin: 0 0 0.85rem;
   font-weight: 400;
 }
 
 .feature-highlights {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1rem;
+  flex-grow: 1;
 }
 
 .feature-highlights li {
-  font-size: 0.875rem;
+  font-size: 0.825rem;
   color: #94a3b8;
-  padding: 0.35rem 0;
-  padding-left: 1.25rem;
+  padding: 0.25rem 0;
+  padding-left: 1.15rem;
   position: relative;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .feature-highlights li::before {
@@ -191,18 +198,18 @@
   left: 0;
   color: #fbbf24;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 .feature-action {
   margin-top: auto;
-  padding-top: 0.5rem;
+  padding-top: 0.35rem;
 }
 
 .action-text {
   display: inline-flex;
   align-items: center;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #fbbf24;
   transition: all 0.3s ease;
@@ -216,20 +223,21 @@
 
 /* Footer */
 .homepage-footer {
-  padding: 2rem 1.5rem 1.5rem;
+  padding: 1rem 1.5rem 1rem;
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.15);
+  margin-top: auto;
 }
 
 .ad-container {
   max-width: 728px;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.5rem;
   opacity: 0.9;
 }
 
 .footer-text {
-  font-size: 0.875rem;
+  font-size: 0.825rem;
   color: #94a3b8;
   margin: 0;
   font-weight: 400;
@@ -268,19 +276,23 @@
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .hero-section {
-    padding: 2rem 1rem 1.5rem;
+    padding: 1.5rem 1rem 1rem;
   }
   
   .features-section {
-    padding: 1rem 1rem 2rem;
+    padding: 1rem 1rem 1.5rem;
   }
   
   .feature-card {
-    padding: 1.5rem 1.25rem;
+    padding: 1.25rem 1rem;
   }
   
   .feature-icon {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
+  }
+  
+  .homepage-footer {
+    padding: 1.25rem 1rem 1rem;
   }
 }
 

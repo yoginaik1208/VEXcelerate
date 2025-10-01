@@ -377,7 +377,7 @@ function Timer({ onBackToAnalyzer }) {
             fontSize: '0.9rem',
             fontStyle: 'italic'
           }}>
-            Click or drag the progress bar to scrub time
+            Official 1-minute match timer with driver switch alerts
           </p>
         </div>
         
