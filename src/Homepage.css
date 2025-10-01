@@ -1,12 +1,10 @@
 /* VEXcelerate Homepage - Premium UI/UX Design */
 
 .homepage-container {
-  min-height: auto;
+  min-height: 100vh;
   background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #1e40af 100%);
   color: #ffffff;
   overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Hero Section */
@@ -71,10 +69,9 @@
 
 /* Features Section */
 .features-section {
-  padding: 1.25rem 1.5rem 1.5rem;
+  padding: 1.25rem 1.5rem 1rem;
   max-width: 1400px;
   margin: 0 auto;
-  flex-grow: 1;
 }
 
 .features-grid {
@@ -223,11 +220,10 @@
 
 /* Footer */
 .homepage-footer {
-  padding: 1rem 1.5rem 1rem;
+  padding: 0.75rem 1.5rem 0.75rem;
   text-align: center;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.15);
-  margin-top: auto;
 }
 
 .ad-container {
