@@ -91,7 +91,7 @@
   transition: width 1s ease;
 }
 
-/* Responsive Design */
+/* Responsive Design - Ultra Compact for Mobile */
 @media (max-width: 600px) {
   .timer-container {
     max-width: 95vw !important;
@@ -100,70 +100,112 @@
     left: auto !important;
     top: auto !important;
     transform: none !important;
-    margin: 1rem auto !important;
-    padding: 1rem !important;
+    margin: 0.5rem auto !important;
+    padding: 0.5rem !important;
+    min-width: auto !important;
   }
   
   .timer-centered-wrapper {
     min-height: auto !important;
     height: auto !important;
     position: relative !important;
-    padding: 0.5rem !important;
+    padding: 0 !important;
   }
   
   .timer-header {
-    margin-top: 0.5rem !important;
+    margin-top: 0 !important;
     padding: 0.5rem !important;
+  }
+  
+  .timer-header h1 {
+    font-size: 1.3rem !important;
+    margin: 0 0 0.25rem 0 !important;
+  }
+  
+  .timer-header p {
+    font-size: 0.75rem !important;
+    margin: 0 !important;
+  }
+  
+  .timer-header > div {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  
+  /* Phase text - make it smaller */
+  .timer-container > div:not(.timer-header):not(.time-display) p {
+    font-size: 0.8rem !important;
+    margin: 0.25rem 0 !important;
   }
   
   .timer-controls {
     flex-direction: row !important;
     justify-content: center !important;
-    gap: 0.5rem !important;
+    gap: 0.4rem !important;
     flex-wrap: wrap !important;
-    margin: 1rem 0 !important;
+    margin: 0.5rem 0 !important;
   }
   
   .timer-controls button {
     width: auto !important;
-    min-width: 120px !important;
+    min-width: 100px !important;
     max-width: none !important;
-    padding: 0.75rem 1.5rem !important;
-    font-size: 0.95rem !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.85rem !important;
   }
   
   .driver-switches {
     flex-direction: column !important;
     align-items: center !important;
-    gap: 0.75rem !important;
-    margin: 1rem 0 !important;
+    gap: 0.4rem !important;
+    margin: 0.5rem 0 0.5rem 0 !important;
   }
   
-  .driver-switches button {
+  .driver-switches > div,
+  .driver-switches button,
+  .switch-indicator {
     width: 90% !important;
     max-width: 300px !important;
-    font-size: 0.95rem !important;
-    padding: 0.75rem !important;
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.5rem !important;
+    margin: 0 !important;
   }
   
-  /* Make time display responsive */
+  /* Make time display compact */
   .time-display {
-    font-size: clamp(3rem, 15vw, 4rem) !important;
-    padding: 1rem 0.5rem !important;
+    font-size: 2.5rem !important;
+    padding: 0.5rem !important;
+    margin: 0.5rem 0 !important;
   }
   
-  /* Adjust title sizes */
-  h1 {
-    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+  .time-display > div {
+    font-size: 0.7rem !important;
+    margin-top: 0.25rem !important;
+    padding: 0.25rem !important;
   }
   
-  p {
-    font-size: clamp(0.85rem, 3vw, 1rem) !important;
+  /* Progress bar - more compact */
+  .match-progress {
+    margin: 0.5rem 0 !important;
   }
   
-  /* Progress bar */
-  .progress-container {
-    margin: 1rem 0 !important;
+  .progress-bar {
+    height: 12px !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .progress-bar > div:last-child {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .progress-milestones {
+    font-size: 0.65rem !important;
+    margin-top: 0.25rem !important;
+  }
+  
+  .progress-milestones > div {
+    padding: 0 !important;
   }
 }
 
