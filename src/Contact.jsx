@@ -17,18 +17,21 @@ const Contact = () => {
     setError(false);
     
     try {
-      // Use Formspree endpoint - sends to yoginaik0212@gmail.com
-      const response = await fetch('https://formspree.io/f/xnnqanre', {
+      // Use FormSubmit.co - sends directly to yoginaik0212@gmail.com with zero setup
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('email', form.email);
+      formData.append('message', form.message);
+      formData.append('_subject', `New message from ${form.name} via VEXcelerate`);
+      formData.append('_captcha', 'false'); // Disable captcha for smooth UX
+      formData.append('_template', 'table'); // Nice email template
+      
+      const response = await fetch('https://formsubmit.co/yoginaik0212@gmail.com', {
         method: 'POST',
+        body: formData,
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          message: form.message,
-          _replyto: form.email,
-        }),
+          'Accept': 'application/json'
+        }
       });
 
       if (response.ok) {
