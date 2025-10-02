@@ -7,7 +7,9 @@
 .contact-form textarea { min-height: 80px; resize: vertical; }
 .contact-form button { background: #ff9800; color: #fff; font-weight: 700; font-size: 1.1rem; padding: 0.8rem 2rem; border-radius: 10px; border: none; box-shadow: 0 4px 16px rgba(67,206,162,0.12); transition: background 0.2s; cursor: pointer; }
 .contact-form button:hover { background: #ffc107; color: #222; }
+.contact-form button:disabled { background: #ccc; cursor: not-allowed; opacity: 0.7; }
 .contact-success { background: #4caf50; color: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; font-weight: 600; animation: fadeInUp 0.7s; }
+.contact-error { background: #f44336; color: #fff; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; font-weight: 600; animation: fadeInUp 0.7s; }
 .contact-footer { font-size: 1rem; margin-top: 1.2rem; }
 .contact-footer a { color: #fff; text-decoration: underline; }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: none; } }
