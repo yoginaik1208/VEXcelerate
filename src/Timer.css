@@ -91,8 +91,8 @@
   transition: width 1s ease;
 }
 
-/* Responsive Design - Ultra Compact for Mobile */
-@media (max-width: 600px) {
+/* Responsive Design - Mobile Portrait (Normal Compact) */
+@media (max-width: 600px) and (orientation: portrait) {
   .timer-container {
     max-width: 95vw !important;
     width: 95vw !important;
@@ -100,8 +100,84 @@
     left: auto !important;
     top: auto !important;
     transform: none !important;
-    margin: 0.5rem auto !important;
+    margin: 1rem auto !important;
+    padding: 1rem !important;
+  }
+  
+  .timer-centered-wrapper {
+    min-height: auto !important;
+    height: auto !important;
+    position: relative !important;
     padding: 0.5rem !important;
+  }
+  
+  .timer-header {
+    margin-top: 0.5rem !important;
+    padding: 0.5rem !important;
+  }
+  
+  .timer-controls {
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: wrap !important;
+    margin: 1rem 0 !important;
+  }
+  
+  .timer-controls button {
+    width: auto !important;
+    min-width: 120px !important;
+    max-width: none !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.95rem !important;
+  }
+  
+  .driver-switches {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    margin: 1rem 0 !important;
+  }
+  
+  .driver-switches button {
+    width: 90% !important;
+    max-width: 300px !important;
+    font-size: 0.95rem !important;
+    padding: 0.75rem !important;
+  }
+  
+  /* Make time display responsive */
+  .time-display {
+    font-size: clamp(3rem, 15vw, 4rem) !important;
+    padding: 1rem 0.5rem !important;
+  }
+  
+  /* Adjust title sizes */
+  h1 {
+    font-size: clamp(1.5rem, 6vw, 2rem) !important;
+  }
+  
+  p {
+    font-size: clamp(0.85rem, 3vw, 1rem) !important;
+  }
+  
+  /* Progress bar */
+  .progress-container {
+    margin: 1rem 0 !important;
+  }
+}
+
+/* Responsive Design - Mobile Landscape (Maximize Space!) */
+@media (max-width: 900px) and (orientation: landscape) {
+  .timer-container {
+    max-width: 98vw !important;
+    width: 98vw !important;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 0.5rem auto !important;
+    padding: 0.75rem 1.5rem !important;
     min-width: auto !important;
   }
   
@@ -109,7 +185,7 @@
     min-height: auto !important;
     height: auto !important;
     position: relative !important;
-    padding: 0 !important;
+    padding: 0.25rem !important;
   }
   
   .timer-header {
@@ -118,94 +194,69 @@
   }
   
   .timer-header h1 {
-    font-size: 1.3rem !important;
+    font-size: 1.5rem !important;
     margin: 0 0 0.25rem 0 !important;
   }
   
   .timer-header p {
-    font-size: 0.75rem !important;
+    font-size: 0.9rem !important;
     margin: 0 !important;
   }
   
-  .timer-header > div {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
+  /* Time display - big and bold in landscape */
+  .time-display {
+    font-size: 4rem !important;
+    padding: 0.75rem !important;
+    margin: 0.5rem 0 !important;
   }
   
-  /* Phase text - make it smaller */
-  .timer-container > div:not(.timer-header):not(.time-display) p {
-    font-size: 0.8rem !important;
-    margin: 0.25rem 0 !important;
-  }
-  
+  /* Make controls and switches side by side in landscape */
   .timer-controls {
     flex-direction: row !important;
     justify-content: center !important;
-    gap: 0.4rem !important;
+    gap: 0.75rem !important;
     flex-wrap: wrap !important;
-    margin: 0.5rem 0 !important;
+    margin: 0.75rem 0 !important;
   }
   
   .timer-controls button {
     width: auto !important;
-    min-width: 100px !important;
-    max-width: none !important;
-    padding: 0.5rem 1rem !important;
-    font-size: 0.85rem !important;
+    min-width: 140px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 1rem !important;
   }
   
+  /* Driver switches side by side in landscape */
   .driver-switches {
-    flex-direction: column !important;
+    flex-direction: row !important;
     align-items: center !important;
-    gap: 0.4rem !important;
-    margin: 0.5rem 0 0.5rem 0 !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    margin: 0.75rem 0 !important;
   }
   
   .driver-switches > div,
   .driver-switches button,
   .switch-indicator {
-    width: 90% !important;
-    max-width: 300px !important;
-    font-size: 0.75rem !important;
-    padding: 0.4rem 0.5rem !important;
-    margin: 0 !important;
+    width: auto !important;
+    min-width: 200px !important;
+    max-width: none !important;
+    font-size: 0.9rem !important;
+    padding: 0.75rem 1rem !important;
   }
   
-  /* Make time display compact */
-  .time-display {
-    font-size: 2.5rem !important;
-    padding: 0.5rem !important;
-    margin: 0.5rem 0 !important;
-  }
-  
-  .time-display > div {
-    font-size: 0.7rem !important;
-    margin-top: 0.25rem !important;
-    padding: 0.25rem !important;
-  }
-  
-  /* Progress bar - more compact */
+  /* Progress bar */
   .match-progress {
-    margin: 0.5rem 0 !important;
+    margin: 0.75rem 0 !important;
   }
   
   .progress-bar {
-    height: 12px !important;
-    margin-bottom: 0.5rem !important;
-  }
-  
-  .progress-bar > div:last-child {
-    width: 18px !important;
-    height: 18px !important;
+    height: 16px !important;
+    margin-bottom: 0.75rem !important;
   }
   
   .progress-milestones {
-    font-size: 0.65rem !important;
-    margin-top: 0.25rem !important;
-  }
-  
-  .progress-milestones > div {
-    padding: 0 !important;
+    font-size: 0.8rem !important;
   }
 }
 
