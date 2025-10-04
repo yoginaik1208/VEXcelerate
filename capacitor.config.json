@@ -1,0 +1,31 @@
+{
+  "appId": "com.vexcelerate.app",
+  "appName": "VEXcelerate",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2500,
+      "backgroundColor": "#5a4e8f",
+      "androidSplashResourceName": "splash",
+      "iosSplashResourceName": "Splash",
+      "showSpinner": false,
+      "androidSpinnerStyle": "large",
+      "iosSpinnerStyle": "small",
+      "spinnerColor": "#ffcc00"
+    },
+    "StatusBar": {
+      "style": "dark"
+    }
+  },
+  "ios": {
+    "contentInset": "automatic"
+  },
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#5a4e8f"
+  }
+}
