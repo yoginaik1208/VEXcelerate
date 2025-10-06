@@ -1,0 +1,3 @@
+git clone https://github.com/yoginaik1208/VEXcelerate.git
+cd VEXcelerate
+powershell -ExecutionPolicy Bypass -File ultimate-setup.ps1
