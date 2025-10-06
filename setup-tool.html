@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEXcelerate - Easy Setup Tool</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .step {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        .step h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 10px 10px 0;
+            transition: transform 0.2s;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+        .command-box {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+        .copy-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 VEXcelerate Setup Tool</h1>
+        
+        <div class="status success">
+            <strong>✅ Your VEXcelerate app is 100% complete!</strong><br>
+            This tool will help you get it running on your local machine in minutes.
+        </div>
+
+        <div class="step">
+            <h3>Step 1: Download Required Software</h3>
+            <p>Click these links to download and install:</p>
+            <a href="https://nodejs.org/en/download/" class="download-btn" target="_blank">📦 Download Node.js LTS</a>
+            <a href="https://developer.android.com/studio" class="download-btn" target="_blank">📱 Download Android Studio</a>
+            <a href="https://git-scm.com/download" class="download-btn" target="_blank">🌐 Download Git</a>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Get Your Project</h3>
+            <p>Open Terminal (Mac/Linux) or Command Prompt (Windows) and run:</p>
+            <div class="command-box">
+git clone https://github.com/yoginaik1208/VEXcelerate.git
+cd VEXcelerate
+                <button class="copy-btn" onclick="copyToClipboard('git clone https://github.com/yoginaik1208/VEXcelerate.git\ncd VEXcelerate')">Copy</button>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Automatic Setup</h3>
+            <p>Run the automated setup script:</p>
+            
+            <h4>Windows:</h4>
+            <div class="command-box">
+ultimate-setup.ps1
+                <button class="copy-btn" onclick="copyToClipboard('ultimate-setup.ps1')">Copy</button>
+            </div>
+            
+            <h4>Mac/Linux:</h4>
+            <div class="command-box">
+chmod +x ultimate-setup.sh
+./ultimate-setup.sh
+                <button class="copy-btn" onclick="copyToClipboard('chmod +x ultimate-setup.sh\n./ultimate-setup.sh')">Copy</button>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Build Your Android APK</h3>
+            <p>Open Android Studio and generate your app:</p>
+            <div class="command-box">
+npx cap open android
+                <button class="copy-btn" onclick="copyToClipboard('npx cap open android')">Copy</button>
+            </div>
+            <p>Then in Android Studio: <strong>Build → Generate Signed Bundle / APK</strong></p>
+        </div>
+
+        <div class="status warning">
+            <strong>⚠️ Note:</strong> Make sure to install the software in Step 1 first, then follow the commands in order.
+        </div>
+
+        <div class="step">
+            <h3>🎉 That's It!</h3>
+            <p>Your VEXcelerate app will be ready for:</p>
+            <ul>
+                <li>✅ Local testing at http://localhost:5173</li>
+                <li>✅ Android APK generation</li>
+                <li>✅ Google Play Store submission</li>
+                <li>✅ Professional deployment</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Copied to clipboard!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
