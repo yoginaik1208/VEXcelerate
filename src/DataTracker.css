@@ -153,6 +153,55 @@
   gap: 1rem;
 }
 
+.month-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.export-button {
+  background: rgba(102, 126, 234, 0.8);
+  color: white;
+  border: 2px solid #667eea;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  min-width: 70px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.export-button:hover {
+  background: rgba(102, 126, 234, 0.95);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.csv-export {
+  background: rgba(34, 139, 34, 0.8);
+  border-color: #228b22;
+}
+
+.csv-export:hover {
+  background: rgba(34, 139, 34, 0.95);
+  box-shadow: 0 4px 12px rgba(34, 139, 34, 0.4);
+}
+
+.chart-download {
+  background: rgba(255, 140, 0, 0.8);
+  border-color: #ff8c00;
+}
+
+.chart-download:hover {
+  background: rgba(255, 140, 0, 0.95);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.4);
+}
+
 .month-box {
   background: white;
   color: #2c3e50;

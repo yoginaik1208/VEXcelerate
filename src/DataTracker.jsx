@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './DataTracker.css';
 
 function DataTracker({ onBackToAnalyzer }) {
-  const [currentView, setCurrentView] = useState('main'); // 'main', 'calendar', 'dayRuns'
+  const [currentView, setCurrentView] = useState('main'); // 'main', 'calendar', 'dayRuns', 'charts'
   const [monthlyData, setMonthlyData] = useState({});
   const [selectedMonth, setSelectedMonth] = useState('');
   const [showMonthSelector, setShowMonthSelector] = useState(false);
@@ -10,23 +10,72 @@ function DataTracker({ onBackToAnalyzer }) {
   const [selectedDay, setSelectedDay] = useState(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [monthToDelete, setMonthToDelete] = useState('');
+  const [chartMonth, setChartMonth] = useState('');
 
-  // Load data from localStorage on component mount
+  // Load data from localStorage on component mount and when component becomes visible
+  useEffect(() => {
+    const loadData = () => {
+      const savedData = localStorage.getItem('vex-data-tracker');
+      console.log('DataTracker loading data:', savedData); // Debug log
+      if (savedData) {
+        try {
+          const parsedData = JSON.parse(savedData);
+          console.log('DataTracker parsed data:', parsedData); // Debug log
+          setMonthlyData(parsedData);
+        } catch (error) {
+          console.error('Error loading saved data:', error);
+        }
+      }
+    };
+    
+    loadData();
+    
+    // Also refresh data when the component becomes visible again
+    const handleFocus = () => {
+      console.log('DataTracker window focused, refreshing data...');
+      loadData();
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
+  // Auto-create charts for months that have data but no chart container
   useEffect(() => {
     const savedData = localStorage.getItem('vex-data-tracker');
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
-        setMonthlyData(parsedData);
+        console.log('Auto-chart creation - checking data:', parsedData);
+        
+        // Check each month in saved data
+        Object.keys(parsedData).forEach(month => {
+          const monthData = parsedData[month];
+          // Check if this month has any score data (not just empty object)
+          const hasScores = Object.keys(monthData).some(key => 
+            !key.includes('_runs') && monthData[key] !== undefined && monthData[key] !== ''
+          );
+          
+          if (hasScores && !monthlyData[month]) {
+            console.log(`Auto-creating chart for ${month} with data:`, monthData);
+            setMonthlyData(prev => ({
+              ...prev,
+              [month]: monthData
+            }));
+          }
+        });
       } catch (error) {
-        console.error('Error loading saved data:', error);
+        console.error('Error in auto-chart creation:', error);
       }
     }
-  }, []);
+  }, []); // Run once on mount
 
   // Save data to localStorage whenever monthlyData changes
   useEffect(() => {
-    localStorage.setItem('vex-data-tracker', JSON.stringify(monthlyData));
+    if (Object.keys(monthlyData).length > 0) {
+      localStorage.setItem('vex-data-tracker', JSON.stringify(monthlyData));
+      console.log('DataTracker saved data:', monthlyData);
+    }
   }, [monthlyData]);
 
   const months = [
@@ -97,6 +146,118 @@ function DataTracker({ onBackToAnalyzer }) {
   const deleteMonth = (month) => {
     setMonthToDelete(month);
     setShowDeleteConfirm(true);
+  };
+
+  // CSV Export functionality
+  const exportToCSV = (month) => {
+    const data = monthlyData[month];
+    if (!data) return;
+
+    let csvContent = "Date,Score\n";
+    
+    for (let day = 1; day <= getDaysInMonth(month); day++) {
+      if (data[day] !== undefined) {
+        const monthIndex = months.indexOf(month) + 1;
+        const date = `${new Date().getFullYear()}-${monthIndex.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        csvContent += `${date},${data[day]}\n`;
+      }
+    }
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `VEX_Scores_${month}_${new Date().getFullYear()}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  // Chart data generation
+  const getChartData = (month) => {
+    const data = monthlyData[month];
+    if (!data) return [];
+    
+    const chartData = [];
+    for (let day = 1; day <= getDaysInMonth(month); day++) {
+      if (data[day] !== undefined) {
+        chartData.push({ day, score: data[day] });
+      }
+    }
+    return chartData;
+  };
+
+  // Download chart as image
+  const downloadChart = (month) => {
+    const chartElement = document.getElementById(`chart-${month}`);
+    if (!chartElement) return;
+
+    // Create a canvas and draw the chart
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800;
+    canvas.height = 400;
+    
+    // White background
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Get chart data
+    const data = getChartData(month);
+    if (data.length === 0) return;
+    
+    const padding = 60;
+    const chartWidth = canvas.width - 2 * padding;
+    const chartHeight = canvas.height - 2 * padding;
+    
+    const maxScore = Math.max(...data.map(d => d.score));
+    const minScore = Math.min(...data.map(d => d.score));
+    const scoreRange = maxScore - minScore || 1;
+    
+    // Draw title
+    ctx.fillStyle = '#333';
+    ctx.font = 'bold 20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(`VEX Scores - ${month} ${new Date().getFullYear()}`, canvas.width / 2, 30);
+    
+    // Draw axes
+    ctx.strokeStyle = '#ccc';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, padding + chartHeight);
+    ctx.lineTo(padding + chartWidth, padding + chartHeight);
+    ctx.stroke();
+    
+    // Draw data points and lines
+    ctx.strokeStyle = '#667eea';
+    ctx.fillStyle = '#667eea';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    
+    data.forEach((point, index) => {
+      const x = padding + (point.day / getDaysInMonth(month)) * chartWidth;
+      const y = padding + chartHeight - ((point.score - minScore) / scoreRange) * chartHeight;
+      
+      if (index === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+      
+      // Draw point
+      ctx.fillRect(x - 2, y - 2, 4, 4);
+    });
+    ctx.stroke();
+    
+    // Download
+    const link = document.createElement('a');
+    link.download = `VEX_Chart_${month}_${new Date().getFullYear()}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
   };
 
   const confirmDeleteMonth = () => {
@@ -250,11 +411,63 @@ function DataTracker({ onBackToAnalyzer }) {
 
   return (
     <div className="data-tracker-container">
+      {/* Back Button */}
+      <button 
+        onClick={onBackToAnalyzer}
+        className="back-button"
+        style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '25px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          zIndex: 1000,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={e => e.target.style.transform = 'translateY(-2px)'}
+        onMouseLeave={e => e.target.style.transform = 'translateY(0)'}
+      >
+        ← Home
+      </button>
+
       <div className="tracker-header">
         <h1>Team Data Tracker</h1>
         <p style={{marginTop: '-8px', color: '#3b4ba0', fontWeight: 600}}>
           Track your team's progress with monthly score charts
         </p>
+        <button 
+          onClick={() => {
+            const savedData = localStorage.getItem('vex-data-tracker');
+            console.log('Manual refresh - current data:', savedData);
+            if (savedData) {
+              const parsedData = JSON.parse(savedData);
+              setMonthlyData(parsedData);
+              alert(`Data refreshed! Found ${Object.keys(parsedData).length} months of data.`);
+            } else {
+              alert('No saved data found.');
+            }
+          }}
+          className="refresh-button"
+          style={{
+            marginLeft: '10px',
+            padding: '5px 10px',
+            fontSize: '0.8rem',
+            background: '#667eea',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          🔄 Refresh Data
+        </button>
       </div>
 
       <div className="tracker-content">
@@ -307,13 +520,33 @@ function DataTracker({ onBackToAnalyzer }) {
                 >
                   {month}
                 </div>
-                <button 
-                  className="delete-month-button"
-                  onClick={() => deleteMonth(month)}
-                  title={`Delete ${month}`}
-                >
-                  🗑️
-                </button>
+                <div className="month-actions">
+                  {getMonthScores(month).length > 0 && (
+                    <>
+                      <button 
+                        className="export-button csv-export"
+                        onClick={() => exportToCSV(month)}
+                        title={`Export ${month} data to CSV`}
+                      >
+                        📊 CSV
+                      </button>
+                      <button 
+                        className="export-button chart-download"
+                        onClick={() => downloadChart(month)}
+                        title={`Download ${month} chart`}
+                      >
+                        📈 Chart
+                      </button>
+                    </>
+                  )}
+                  <button 
+                    className="delete-month-button"
+                    onClick={() => deleteMonth(month)}
+                    title={`Delete ${month}`}
+                  >
+                    🗑️
+                  </button>
+                </div>
               </div>
               
               <div className="chart-content">

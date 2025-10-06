@@ -14,6 +14,10 @@ function MixMatchCalculator({ onBackToAnalyzer }) {
   });
 
   const [totalScore, setTotalScore] = useState(0);
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Official VEX IQ Mix and Match 2025-26 Scoring Values
   const scoringValues = {
@@ -49,6 +53,89 @@ function MixMatchCalculator({ onBackToAnalyzer }) {
       ...prev,
       [category]: value
     }));
+  };
+
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const getCurrentMonth = () => {
+    const now = new Date();
+    return months[now.getMonth()];
+  };
+
+  const getCurrentDate = () => {
+    const now = new Date();
+    return now.getDate();
+  };
+
+  const handleSaveToDataTracker = () => {
+    if (totalScore === 0) {
+      alert('Please calculate a score first before saving!');
+      return;
+    }
+    
+    // Initialize with current date
+    const currentMonth = getCurrentMonth();
+    const currentDay = getCurrentDate();
+    
+    setSelectedMonth(currentMonth);
+    setSelectedDate(currentDay.toString());
+    setShowSaveDialog(true);
+  };
+
+  const confirmSave = () => {
+    if (!selectedMonth || !selectedDate) {
+      alert('Please select both a month and date!');
+      return;
+    }
+
+    try {
+      // Load existing data
+      const savedData = localStorage.getItem('vex-data-tracker');
+      let monthlyData = savedData ? JSON.parse(savedData) : {};
+      
+      console.log('Mix&Match saving - before:', monthlyData);
+
+      // Ensure month exists
+      if (!monthlyData[selectedMonth]) {
+        monthlyData[selectedMonth] = {};
+      }
+
+      // Save the score to the selected date
+      monthlyData[selectedMonth][selectedDate] = totalScore;
+      
+      console.log('Mix&Match saving - after:', monthlyData);
+
+      // Save back to localStorage
+      localStorage.setItem('vex-data-tracker', JSON.stringify(monthlyData));
+      
+      console.log('Mix&Match saved successfully:', {
+        month: selectedMonth,
+        date: selectedDate,
+        score: totalScore
+      });
+
+      // Show success message
+      setSaveSuccess(true);
+      setShowSaveDialog(false);
+
+      // Auto-hide success message after 3 seconds
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+
+    } catch (error) {
+      console.error('Error saving to data tracker:', error);
+      alert('Error saving to data tracker. Please try again.');
+    }
+  };
+
+  const cancelSave = () => {
+    setShowSaveDialog(false);
+    setSelectedMonth('');
+    setSelectedDate('');
   };
 
   const clearAllScores = () => {
@@ -102,6 +189,32 @@ function MixMatchCalculator({ onBackToAnalyzer }) {
 
   return (
     <div className="mixmatch-container">
+      {/* Back Button */}
+      <button 
+        onClick={onBackToAnalyzer}
+        className="back-button"
+        style={{
+          position: 'fixed',
+          top: '20px',
+          left: '20px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          border: 'none',
+          padding: '10px 20px',
+          borderRadius: '25px',
+          cursor: 'pointer',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          zIndex: 1000,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={e => e.target.style.transform = 'translateY(-2px)'}
+        onMouseLeave={e => e.target.style.transform = 'translateY(0)'}
+      >
+        ← Home
+      </button>
+
       <div className="mixmatch-header">
         <h1>Mix & Match Calculator</h1>
         <p style={{marginTop: '-8px', color: 'var(--cream)', fontWeight: 600, fontSize: '1.1rem', textShadow: '0 1px 3px rgba(0, 0, 0, 0.5)', background: 'rgba(0, 0, 0, 0.2)', padding: '0.5rem 1rem', borderRadius: '8px', display: 'inline-block'}}>
@@ -192,6 +305,9 @@ function MixMatchCalculator({ onBackToAnalyzer }) {
           </div>
           
           <div className="calculator-actions">
+            <button onClick={handleSaveToDataTracker} className="save-button">
+              💾 Save to Data Tracker
+            </button>
             <button onClick={clearAllScores} className="clear-button">
               Clear All Scores
             </button>
@@ -237,6 +353,63 @@ function MixMatchCalculator({ onBackToAnalyzer }) {
           </div>
         </div>
       </div>
+
+      {/* Save to Data Tracker Dialog */}
+      {showSaveDialog && (
+        <div className="modal-overlay" onClick={cancelSave}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>💾 Save Score to Data Tracker</h3>
+              <button className="modal-close" onClick={cancelSave}>×</button>
+            </div>
+            <div className="modal-body">
+              <p>Save your score of <strong>{totalScore} points</strong> to the monthly calendar?</p>
+              
+              <div className="date-selector">
+                <div className="input-group">
+                  <label>Month:</label>
+                  <select 
+                    value={selectedMonth} 
+                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    className="month-select"
+                  >
+                    {months.map(month => (
+                      <option key={month} value={month}>{month}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="input-group">
+                  <label>Date:</label>
+                  <input 
+                    type="number" 
+                    min="1" 
+                    max="31" 
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="date-input"
+                    placeholder="Day"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button onClick={cancelSave} className="cancel-button">Cancel</button>
+              <button onClick={confirmSave} className="confirm-button">Save Score</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Message */}
+      {saveSuccess && (
+        <div className="success-notification">
+          <div className="success-content">
+            <span className="success-icon">✅</span>
+            <span>Score saved to Data Tracker successfully!</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
